@@ -79,7 +79,8 @@ resource "aws_db_instance" "mydb" {
   engine               = "mysql"
   engine_version       = "8.0"
   instance_class       = "db.t2.micro"
-  name                 = var.db_name
+  identifier           = "mydb-instance"        # Nom unique de l'instance
+  db_name              = var.db_name           # Nom de la base à l'intérieur de l'instance
   username             = var.db_username
   password             = var.db_password
   db_subnet_group_name = aws_db_subnet_group.db_subnets.name
