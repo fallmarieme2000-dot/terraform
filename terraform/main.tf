@@ -74,15 +74,4 @@ resource "aws_db_subnet_group" "db_subnets" {
   tags = { Name = "DB subnet group" }
 }
 
-resource "aws_db_instance" "mydb" {
-  allocated_storage    = 20
-  engine               = "mysql"
-  engine_version       = "8.0"
-  instance_class       = "db.t2.micro"
-  identifier           = "mydb-instance"        # Nom unique de l'instance
-  db_name              = var.db_name           # Nom de la base à l'intérieur de l'instance
-  username             = var.db_username
-  password             = var.db_password
-  publicly_accessible  = true
-  skip_final_snapshot  = true
-}
+
