@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '📥 Clonage du dépôt...'
-                git 'https://github.com/ton-utilisateur/terraform-aws.git'
+                git 'https://github.com/fallmarieme2000-dot/terraform.git'
             }
         }
 
