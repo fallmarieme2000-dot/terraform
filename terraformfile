@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'us-east-1'
+        AWS_REGION = 'us-west-2'
         TF_DIR = './terraform'  // chemin vers ton dossier Terraform
     }
 
