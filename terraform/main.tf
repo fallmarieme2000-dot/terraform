@@ -66,10 +66,3 @@ resource "aws_instance" "web" {
   iam_instance_profile   = "LabInstanceProfile"  # Respecte les restrictions du sandbox
   tags = { Name = "WebServer" }
 }
-
- stage('Terraform Destroy') {
-            steps {
-                dir("${TF_DIR}") {
-                    sh 'terraform destroy -auto-approve'
-                }
-            }
