@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '📥 Clonage du dépôt...'
-                git 'https://github.com/fallmarieme2000-dot/terraform.git'
+                git branch: 'main', url: 'https://github.com/fallmarieme2000-dot/terraform.git'
             }
         }
 
