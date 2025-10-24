@@ -67,11 +67,3 @@ resource "aws_instance" "web" {
   tags = { Name = "WebServer" }
 }
 
-# RDS MySQL
-resource "aws_db_subnet_group" "db_subnets" {
-  name       = "db-subnet-group"
-  subnet_ids = [aws_subnet.public.id]
-  tags = { Name = "DB subnet group" }
-}
-
-
