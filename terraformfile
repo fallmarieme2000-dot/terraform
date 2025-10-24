@@ -56,8 +56,9 @@ pipeline {
             }
         }
 
-       stage('Terraform Destroy') {
+      stage('Terraform Destroy') {
     steps {
+        input message: 'Souhaitez-vous vraiment détruire les ressources Terraform ?'
         withCredentials([
             [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-key'],
             string(credentialsId: 'aws-token', variable: 'AWS_SESSION_TOKEN')
@@ -68,6 +69,7 @@ pipeline {
         }
     }
 }
+
 
 
     }
