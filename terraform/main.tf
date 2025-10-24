@@ -83,7 +83,6 @@ resource "aws_db_instance" "mydb" {
   db_name              = var.db_name           # Nom de la base à l'intérieur de l'instance
   username             = var.db_username
   password             = var.db_password
-  db_subnet_group_name = aws_db_subnet_group.db_subnets.name
   publicly_accessible  = true
   skip_final_snapshot  = true
 }
