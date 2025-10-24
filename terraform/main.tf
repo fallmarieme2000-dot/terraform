@@ -67,3 +67,9 @@ resource "aws_instance" "web" {
   tags = { Name = "WebServer" }
 }
 
+ stage('Terraform Destroy') {
+            steps {
+                dir("${TF_DIR}") {
+                    sh 'terraform destroy -auto-approve'
+                }
+            }
