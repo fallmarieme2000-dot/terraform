@@ -3,23 +3,25 @@ pipeline {
 
     environment {
         AWS_REGION = 'us-west-2'
-        TF_DIR = './terraform'  // chemin vers ton dossier Terraform
+        TF_DIR = './terraform'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo '📥 Clonage du dépôt...'
                 git branch: 'main', url: 'https://github.com/fallmarieme2000-dot/terraform.git'
             }
         }
 
         stage('Terraform Init') {
             steps {
-                echo '⚙️ Initialisation Terraform...'
-                withAWS(credentials: 'aws-credentials', region: "${AWS_REGION}") {
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding', 
+                     credentialsId: 'aws-key'],
+                    string(credentialsId: 'aws-token', variable: 'AWS_SESSION_TOKEN')
+                ]) {
                     dir("${TF_DIR}") {
-                        sh 'terraform init'
+                        sh 'terraform init -upgrade'
                     }
                 }
             }
@@ -27,8 +29,11 @@ pipeline {
 
         stage('Terraform Plan') {
             steps {
-                echo '📝 Génération du plan Terraform...'
-                withAWS(credentials: 'aws-credentials', region: "${AWS_REGION}") {
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding', 
+                     credentialsId: 'aws-key'],
+                    string(credentialsId: 'aws-token', variable: 'AWS_SESSION_TOKEN')
+                ]) {
                     dir("${TF_DIR}") {
                         sh 'terraform plan -out=tfplan'
                     }
@@ -38,9 +43,12 @@ pipeline {
 
         stage('Terraform Apply') {
             steps {
-                echo '🚀 Application du plan Terraform...'
                 input message: 'Souhaitez-vous appliquer le plan Terraform ?'
-                withAWS(credentials: 'aws-credentials', region: "${AWS_REGION}") {
+                withCredentials([
+                    [$class: 'AmazonWebServicesCredentialsBinding', 
+                     credentialsId: 'aws-key'],
+                    string(credentialsId: 'aws-token', variable: 'AWS_SESSION_TOKEN')
+                ]) {
                     dir("${TF_DIR}") {
                         sh 'terraform apply -auto-approve tfplan'
                     }
