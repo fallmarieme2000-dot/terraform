@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = 'us-east-1'
+        TF_DIR = './terraform'  // chemin vers ton dossier Terraform
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo '📥 Clonage du dépôt...'
+                git 'https://github.com/ton-utilisateur/terraform-aws.git'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                echo '⚙️ Initialisation Terraform...'
+                withAWS(credentials: 'aws-credentials', region: "${AWS_REGION}") {
+                    dir("${TF_DIR}") {
+                        sh 'terraform init'
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                echo '📝 Génération du plan Terraform...'
+                withAWS(credentials: 'aws-credentials', region: "${AWS_REGION}") {
+                    dir("${TF_DIR}") {
+                        sh 'terraform plan -out=tfplan'
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                echo '🚀 Application du plan Terraform...'
+                input message: 'Souhaitez-vous appliquer le plan Terraform ?'
+                withAWS(credentials: 'aws-credentials', region: "${AWS_REGION}") {
+                    dir("${TF_DIR}") {
+                        sh 'terraform apply -auto-approve tfplan'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo '✅ Pipeline Terraform terminé.'
+        }
+        failure {
+            echo '❌ Le pipeline a échoué.'
+        }
+    }
+}
