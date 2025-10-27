@@ -56,19 +56,7 @@ pipeline {
             }
         }
 
-      stage('Terraform Destroy') {
-    steps {
-        input message: 'Souhaitez-vous vraiment détruire les ressources Terraform ?'
-        withCredentials([
-            [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-key'],
-            string(credentialsId: 'aws-token', variable: 'AWS_SESSION_TOKEN')
-        ]) {
-            dir("${TF_DIR}") {
-                sh 'terraform destroy -auto-approve'
-            }
-        }
-    }
-}
+    
 
 
 
